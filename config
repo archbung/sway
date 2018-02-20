@@ -16,18 +16,14 @@ set $up k
 set $right l
 
 # Your preferred terminal emulator
-set $term st
-
+set $term env WAYLAND_DISPLAY= alacritty
 # Your preferred application launcher
-set $menu rofimenu
-
-# Your preferred font
-font "Iosevka 10"
+set $menu dmenu_run -b -fn "InputMonoCondensed-10"
 
 ### Output configuration
 #
-# Default wallpaper (more resolutions are available in /usr/share/sway/)
-output * bg /usr/share/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 #
 # Example configuration:
 #
@@ -35,32 +31,18 @@ output * bg /usr/share/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
-### Input configuration
-#
-# Example configuration:
-#
-#   input "2:14:SynPS/2_Synaptics_TouchPad" {
-#       dwt enabled
-#       tap enabled
-#       natural_scroll enabled
-#       middle_emulation enabled
-#   }
-#
-# You can get the names of your inputs by running: swaymsg -t get_inputs
-# Read `man 5 sway-input` for more information about this section.
-
 ### Key bindings
 #
 # Basics:
 #
     # start a terminal
-    bindsym $mod+Return exec $term
+    bindsym $mod+Shift+Return exec $term
 
     # kill focused window
-    bindsym $mod+Shift+q kill
+    bindsym $mod+Shift+c kill
 
     # start your launcher
-    bindsym $mod+d exec $menu
+    bindsym $mod+p exec $menu
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -70,10 +52,10 @@ output * bg /usr/share/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     floating_modifier $mod normal
 
     # reload the configuration file
-    bindsym $mod+Shift+c reload
+    bindsym $mod+Shift+r reload
 
     # exit sway (logs you out of your wayland session)
-    bindsym $mod+Shift+e exit
+    bindsym $mod+Shift+q exit
 #
 # Moving around:
 #
@@ -131,8 +113,8 @@ output * bg /usr/share/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+    bindsym $mod+- splith
+    bindsym $mod+| splitv
 
     # Switch the current container between different layout styles
     bindsym $mod+s layout stacking
@@ -187,17 +169,28 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-default_border pixel 2
-default_floating_border pixel 2
-workspace_layout auto
+# Some settings
+hide_edge_borders smart
+focus_follows_mouse no
+border pixel 4
+default_border pixel 4
+default_border_floating pixel 4
+
+# Useful shortcuts
+bindsym XF86AudioRaiseVolume exec amixer set Master 5%+
+bindsym XF86AudioLowerVolume exec amixer set Master 5%-
+bindsym XF86AudioMute exec amixer set Master toggle
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym $mod+Shift+d exec swaylock -c 000000 --indicator-radius 100 --font InputMonoCondensed
 
 #
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
 bar {
+    font "InputMonoCondensed 10"
     position top
-    font "Iosevka 10"
     colors {
         statusline #ffffff
         background #323232
@@ -205,6 +198,6 @@ bar {
     }
 }
 
-include /etc/sway/config.d/*
 include ~/.config/sway/config.d/`hostname`/*
 include ~/.config/sway/config.d/*
+include /etc/sway/config.d/*
